@@ -11,7 +11,7 @@ public class Task {
     private TaskPriority taskPriority;
 
 
-    Task(String name, String description, TaskPriority taskPriority) {
+    public Task(String name, String description, TaskPriority taskPriority) {
         this.name = name;
         this.description = description;
         this.taskPriority = taskPriority;
@@ -20,6 +20,7 @@ public class Task {
     public void setUniqueId(int uniqueId) {
         this.uniqueId = uniqueId;
     }
+
     public int getUniqueId() {
         return uniqueId;
     }
@@ -47,11 +48,13 @@ public class Task {
     }
 
 
-
-
-
     @Override
     public String toString() {
-        return name + " - " + description + " ; " + taskPriority;
+        return "Task{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", uniqueId=" + uniqueId +
+                ", taskPriority=" + taskPriority +
+                '}';
     }
 }

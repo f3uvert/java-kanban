@@ -4,13 +4,19 @@ import ru.yandex.tracker.service.TaskPriority;
 
 public class SubTask extends Task {
     private int epicId;
-    SubTask(String name, String description, int uniqueId, TaskPriority taskPriority) {
+
+    public SubTask(String name, String description, int epicId, TaskPriority taskPriority) {
         super(name, description, taskPriority);
+        this.epicId = epicId;
 
     }
 
-    public int getEpicId(){
+    public int getEpicId() {
         return epicId;
+    }
+
+    public void setEpicId(int epicId) {
+        this.epicId = epicId;
     }
 
 

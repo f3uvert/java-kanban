@@ -10,34 +10,26 @@ import java.util.List;
 
 
 public class Manager {
-    private int counter = 0; //Если я сделаю счетчик костантой то  не смогу присваивать значение id
+    private int counter = 0; // Если я сделаю counter - final,то не смогу изменить у него значение.Строчки с ошибкой:60,68,75
     private final HashMap<Integer, Task> commonTask = new HashMap<>();
     private final HashMap<Integer, Epic> epicTask = new HashMap<>();
     private final HashMap<Integer, SubTask> subTaskMap = new HashMap<>();
 
 
-    List<Task> getTasks() {
+    public List<Task> getTasks() {
 
         return new ArrayList<>(this.commonTask.values());
     }
 
-    List<SubTask> getSubtasks() {
-        ArrayList<SubTask> listSubTasks = new ArrayList<>();
-        for (Task hashMap : subTaskMap.values()) {
-            listSubTasks.add((SubTask) hashMap);
-        }
-        return listSubTasks;
+    public List<SubTask> getSubtasks() {
+        return new ArrayList<>(this.subTaskMap.values());
     }
 
-    List<Epic> getEpics() {
-        ArrayList<Epic> listEpics = new ArrayList<>();
-        for (Task hashMap : epicTask.values()) {
-            listEpics.add((Epic) hashMap);
-        }
-        return listEpics;
+    public List<Epic> getEpics() {
+        return new ArrayList<>(this.epicTask.values());
     }
 
-    List<SubTask> getEpicSubtasks(int epicId) {
+    public List<SubTask> getEpicSubtasks(int epicId) {
         Epic epic = epicTask.get(epicId);
         ArrayList<Integer> allSubTaskId = epic.getAllSubTasks();
         ArrayList<SubTask> newSubTaskList = new ArrayList<>();
@@ -51,21 +43,21 @@ public class Manager {
     }
 
 
-    Task getTask(int id) {
+    public Task getTask(int id) {
         return commonTask.get(id);
     }
 
-    SubTask getSubTask(int id) {
+    public SubTask getSubTask(int id) {
         return subTaskMap.get(id);
     }
 
-    Epic getEpic(int id) {
+    public Epic getEpic(int id) {
         return epicTask.get(id);
     }
 
 
     public int addNewTask(Task task) {
-        final int id = counter++; //При такой записи у меня каждый id будет = 0
+        final int id = counter++;
         task.setUniqueId(id);
         commonTask.put(id, task);
         return id;
@@ -82,6 +74,7 @@ public class Manager {
     public int addNewSubTask(SubTask subTask) {
         final int id = counter++;
         subTask.setUniqueId(id);
+
         subTaskMap.put(id, subTask);
         epicTask.get(subTask.getEpicId()).setSubTaskId(id);
         return id;
@@ -106,8 +99,10 @@ public class Manager {
     }
 
     public void deleteEpic(int epicId) {
-        epicTask.get(epicId).getAllSubTasks().clear();
-        epicTask.remove(epicId);
+        Epic epic = epicTask.remove(epicId);
+        for (Integer subtaskId : epic.getAllSubTasks()) {
+            subTaskMap.remove(subtaskId);
+        }
     }
 
     public void deleteSubTask(int id) {
@@ -133,6 +128,7 @@ public class Manager {
 
     public void deleteEpics() {
         epicTask.clear();
+        subTaskMap.clear();
     }
 
 
@@ -140,7 +136,7 @@ public class Manager {
 
 
         for (Integer i : epic.getAllSubTasks()) {
-            if(epic.equals((subTaskMap.get(i)))) {
+            if (epic.equals((subTaskMap.get(i)))) {
                 i = epic.hashCode();
                 if (subTaskMap.get(i).getTaskPriority() == TaskPriority.IN_PROGRESS) {
                     epic.setTaskPriority(TaskPriority.IN_PROGRESS);
@@ -156,8 +152,7 @@ public class Manager {
                             }
 
                         }
-                    }
-                    else if(subTaskMap.get(i).getTaskPriority() == TaskPriority.NEW){
+                    } else if (subTaskMap.get(i).getTaskPriority() == TaskPriority.NEW) {
                         if (subTaskMap.get(i).getTaskPriority() == TaskPriority.NEW) {
                             for (Integer j : epic.getAllSubTasks()) {
                                 if (subTaskMap.get(j).getTaskPriority() == TaskPriority.DONE) {
@@ -173,8 +168,6 @@ public class Manager {
                 }
             }
         }
-
-
 
 
     }
