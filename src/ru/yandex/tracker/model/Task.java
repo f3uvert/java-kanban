@@ -1,5 +1,6 @@
 package ru.yandex.tracker.model;
 
+import org.junit.jupiter.api.Test;
 import ru.yandex.tracker.service.TaskPriority;
 
 import java.util.Objects;
@@ -16,13 +17,33 @@ public class Task {
         this.description = description;
         this.taskPriority = taskPriority;
     }
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void setDescription(String description){
+       this.description = description;
+    }
+
+    public String getDescription(){
+        return description;
+    }
 
     public void setUniqueId(int uniqueId) {
+
         this.uniqueId = uniqueId;
     }
 
     public int getUniqueId() {
         return uniqueId;
+    }
+
+    public TaskPriority getTaskPriority() {
+        return taskPriority;
     }
 
 
@@ -43,9 +64,7 @@ public class Task {
         this.taskPriority = taskPriority;
     }
 
-    public TaskPriority getTaskPriority() {
-        return taskPriority;
-    }
+
 
 
     @Override
@@ -57,4 +76,5 @@ public class Task {
                 ", taskPriority=" + taskPriority +
                 '}';
     }
+
 }

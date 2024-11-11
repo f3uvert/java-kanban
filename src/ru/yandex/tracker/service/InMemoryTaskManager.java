@@ -7,28 +7,33 @@ import ru.yandex.tracker.model.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 
-public class Manager {
-    private int counter = 0; // Если я сделаю counter - final,то не смогу изменить у него значение.Строчки с ошибкой:60,68,75
+public class InMemoryTaskManager implements TaskManager {
+    private int counter = 0;
     private final HashMap<Integer, Task> commonTask = new HashMap<>();
     private final HashMap<Integer, Epic> epicTask = new HashMap<>();
     private final HashMap<Integer, SubTask> subTaskMap = new HashMap<>();
+    private final ArrayList<Task> historyView = new ArrayList<>();
 
-
+    @Override
     public List<Task> getTasks() {
 
         return new ArrayList<>(this.commonTask.values());
     }
 
+    @Override
     public List<SubTask> getSubtasks() {
         return new ArrayList<>(this.subTaskMap.values());
     }
 
+    @Override
     public List<Epic> getEpics() {
         return new ArrayList<>(this.epicTask.values());
     }
 
+    @Override
     public List<SubTask> getEpicSubtasks(int epicId) {
         Epic epic = epicTask.get(epicId);
         ArrayList<Integer> allSubTaskId = epic.getAllSubTasks();
@@ -42,20 +47,39 @@ public class Manager {
         return newSubTaskList;
     }
 
-
+    @Override
     public Task getTask(int id) {
+        setHistory(commonTask.get(id));
         return commonTask.get(id);
     }
 
+    @Override
     public SubTask getSubTask(int id) {
+        setHistory((Task) subTaskMap.get(id));
         return subTaskMap.get(id);
     }
 
+    @Override
     public Epic getEpic(int id) {
+        setHistory((Task) epicTask.get(id));
         return epicTask.get(id);
     }
 
+    @Override
+    public List<Task> getHistory() {
+        return historyView;
+    }
 
+    private void setHistory(Task task) {
+        if (historyView.size() == 10) {
+            historyView.removeFirst();
+            historyView.add(task);
+        } else {
+            historyView.add(task);
+        }
+    }
+
+    @Override
     public int addNewTask(Task task) {
         final int id = counter++;
         task.setUniqueId(id);
@@ -64,6 +88,7 @@ public class Manager {
 
     }
 
+    @Override
     public int addNewEpic(Epic epic) {
         final int id = counter++;
         epic.setUniqueId(id);
@@ -71,6 +96,7 @@ public class Manager {
         return id;
     }
 
+    @Override
     public int addNewSubTask(SubTask subTask) {
         final int id = counter++;
         subTask.setUniqueId(id);
@@ -80,24 +106,29 @@ public class Manager {
         return id;
     }
 
+    @Override
     public void updateTask(Task task) {
         commonTask.put(task.getUniqueId(), task);
     }
 
+    @Override
     public void updateEpic(Epic epic) {
         epicTask.put(epic.getUniqueId(), epic);
     }
 
+    @Override
     public void updateSubTask(SubTask subTask) {
         subTaskMap.put(subTask.getUniqueId(), subTask);
 
         updateEpicStatus(epicTask.get(subTask.getEpicId()));
     }
 
+    @Override
     public void deleteTask(int id) {
         commonTask.remove(id);
     }
 
+    @Override
     public void deleteEpic(int epicId) {
         Epic epic = epicTask.remove(epicId);
         for (Integer subtaskId : epic.getAllSubTasks()) {
@@ -105,6 +136,7 @@ public class Manager {
         }
     }
 
+    @Override
     public void deleteSubTask(int id) {
         Epic epic = epicTask.get(subTaskMap.get(id).getEpicId());
         epic.getAllSubTasks().remove(id);
@@ -112,10 +144,12 @@ public class Manager {
         updateEpicStatus(epic);
     }
 
+    @Override
     public void deleteTasks() {
         commonTask.clear();
     }
 
+    @Override
     public void deleteSubTasks() {
         subTaskMap.clear();
 
@@ -126,10 +160,12 @@ public class Manager {
 
     }
 
+    @Override
     public void deleteEpics() {
         epicTask.clear();
         subTaskMap.clear();
     }
+
 
 
     private void updateEpicStatus(Epic epic) {
