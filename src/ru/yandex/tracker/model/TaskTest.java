@@ -16,7 +16,7 @@ class TaskTest {
 
     InMemoryTaskManager taskManager = new InMemoryTaskManager();
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
-    Managers managers = new Managers();
+
 
     @Test
     public void equalsTaskId() {
@@ -62,7 +62,7 @@ class TaskTest {
 
     @Test
     public void utilClass() {
-        assertNotNull(managers.getDefault());
+        assertNotNull(Managers.getDefault());
     }
 
 
@@ -92,17 +92,17 @@ class TaskTest {
     @Test
     public void editParameter() {
         Task task = new Task("1", "1", NEW);
-        Task task1 = new Task("1","1",NEW);
 
         taskManager.addNewTask(task);
         task.setName("2");
         task.setDescription("2");
         task.setTaskPriority(IN_PROGRESS);
         task.setUniqueId(1);
-        assertNotEquals(task.getName(),task1.getName());
-        assertNotEquals(task.getDescription(),task1.getDescription());
-        assertNotEquals(task.getUniqueId(),task1.getUniqueId());
-        assertNotEquals(task.getTaskPriority(),task1.getTaskPriority());
+
+        assertEquals(task.getName(),taskManager.getTask(0).getName());
+        assertEquals(task.getDescription(),taskManager.getTask(0).getDescription());
+        assertEquals(task.getUniqueId(),taskManager.getTask(0).getUniqueId());
+        assertEquals(task.getTaskPriority(),taskManager.getTask(0).getTaskPriority());
     }
 
     @Test

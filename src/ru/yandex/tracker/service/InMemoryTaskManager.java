@@ -4,18 +4,15 @@ import ru.yandex.tracker.model.Epic;
 import ru.yandex.tracker.model.SubTask;
 import ru.yandex.tracker.model.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 public class InMemoryTaskManager implements TaskManager {
     private int counter = 0;
-    private final HashMap<Integer, Task> commonTask = new HashMap<>();
-    private final HashMap<Integer, Epic> epicTask = new HashMap<>();
-    private final HashMap<Integer, SubTask> subTaskMap = new HashMap<>();
-    private final ArrayList<Task> historyView = new ArrayList<>();
+    private final Map<Integer, Task> commonTask = new HashMap<>();
+    private final Map<Integer, Epic> epicTask = new HashMap<>();
+    private final Map<Integer, SubTask> subTaskMap = new HashMap<>();
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public List<Task> getTasks() {
@@ -67,15 +64,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getHistory() {
-        return historyView;
+        return historyManager.getHistory();
     }
 
     private void setHistory(Task task) {
-        if (historyView.size() == 10) {
-            historyView.removeFirst();
-            historyView.add(task);
+        if (historyManager.getHistory().size() == 10) {
+            historyManager.getHistory().removeFirst();
+            historyManager.getHistory().add(task);
         } else {
-            historyView.add(task);
+            historyManager.getHistory().add(task);
         }
     }
 
