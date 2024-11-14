@@ -1,10 +1,9 @@
-package ru.yandex.tracker.model;
+package ru.yandex.tracker.service;
 
 import org.junit.jupiter.api.Test;
-import ru.yandex.tracker.service.InMemoryHistoryManager;
-import ru.yandex.tracker.service.InMemoryTaskManager;
-import ru.yandex.tracker.service.Managers;
-import ru.yandex.tracker.service.TaskPriority;
+import ru.yandex.tracker.model.Epic;
+import ru.yandex.tracker.model.SubTask;
+import ru.yandex.tracker.model.Task;
 
 import java.util.List;
 
