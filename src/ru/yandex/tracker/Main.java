@@ -3,36 +3,24 @@ package ru.yandex.tracker;
 import ru.yandex.tracker.model.Epic;
 import ru.yandex.tracker.model.SubTask;
 import ru.yandex.tracker.model.Task;
-import ru.yandex.tracker.service.*;
+import ru.yandex.tracker.service.InMemoryHistoryManager;
+import ru.yandex.tracker.service.InMemoryTaskManager;
+import ru.yandex.tracker.service.TaskManager;
+import ru.yandex.tracker.service.TaskPriority;
 
-
+import static ru.yandex.tracker.service.TaskPriority.*;
 
 public class Main {
 
     public static void main(String[] args) {
-
-        TaskManager manager = Managers.getDefault();
-
-
-        Task task1 = new Task("Task 1", "Description 1", TaskPriority.NEW);
-        int taskId1 = manager.addNewTask(task1);
-
-        Epic epic1 = new Epic("Epic 1", "Description epic", TaskPriority.NEW);
-        int epicId1 = manager.addNewEpic(epic1);
-
-        SubTask subTask1 = new SubTask("Subtask 1", "Desc", epicId1, TaskPriority.NEW);
-        int subTaskId1 = manager.addNewSubTask(subTask1);
-
-
-        manager.getTask(taskId1);
-        manager.getEpic(epicId1);
-        manager.getSubTask(subTaskId1);
-        manager.getTask(taskId1);
-
-
-        System.out.println(manager.getHistory());
-
-
+        InMemoryTaskManager manager = new InMemoryTaskManager();
+        int taskId1 = manager.addNewTask(new Task("task1", "Task1 description", TaskPriority.NEW));
+        int taskId2 = manager.addNewTask(new Task("task1", "Task2 description", TaskPriority.NEW));
+        int epicId1 = manager.addNewEpic(new Epic("1", "1", NEW));
+        int subTaskId1 = manager.addNewSubTask(new SubTask("1", "1", epicId1, NEW));
+        int subTaskId2 = manager.addNewSubTask(new SubTask("2", "2", epicId1, NEW));
+        int subTaskId3 = manager.addNewSubTask(new SubTask("3", "3", epicId1, NEW));
+        printAllTasks(manager);
 
 
     }

@@ -26,7 +26,9 @@ class TaskTest {
         //task.setUniqueId(task1.getUniqueId());
 
         assertEquals(task, task1);
-    }
+
+
+    }//True
 
     @Test
     public void equalsParentId() {
@@ -35,7 +37,7 @@ class TaskTest {
         SubTask subTask = new SubTask("1", "1", epic.getUniqueId(), TaskPriority.NEW);
         subTask.setUniqueId(1);
         assertNotEquals(epic, subTask);
-    }
+    } //True
 
     @Test
     public void checkEpicAdd() {
@@ -43,6 +45,8 @@ class TaskTest {
         epic.setUniqueId(1);
         epic.setSubTaskId(epic.getUniqueId());
         assertEquals(-1, epic.getSubTaskId(epic.getUniqueId()));
+
+
     }
 
     @Test
@@ -50,8 +54,10 @@ class TaskTest {
         SubTask subTask = new SubTask("1", "1", 5, TaskPriority.NEW);
         subTask.setUniqueId(1);
         subTask.setEpicId(subTask.getUniqueId());
+
         assertEquals(5, subTask.getEpicId());
-    }
+
+    }//True
 
     @Test
     public void utilClass() {
@@ -75,11 +81,11 @@ class TaskTest {
     @Test
     public void generateId() {
         Task task = new Task("1", "1", NEW);
-        Epic epic = new Epic("2", "2", NEW);
+        Epic epic = new Epic("2","2",NEW);
         task.setUniqueId(1);
         taskManager.addNewTask(task);
         taskManager.addNewEpic(epic);
-        assertNotEquals(task.getUniqueId(), epic.getUniqueId());
+        assertNotEquals(task.getUniqueId(),epic.getUniqueId());
     }
 
     @Test
@@ -92,10 +98,10 @@ class TaskTest {
         task.setTaskPriority(IN_PROGRESS);
         task.setUniqueId(1);
 
-        assertEquals(task.getName(), taskManager.getTask(0).getName());
-        assertEquals(task.getDescription(), taskManager.getTask(0).getDescription());
-        assertEquals(task.getUniqueId(), taskManager.getTask(0).getUniqueId());
-        assertEquals(task.getTaskPriority(), taskManager.getTask(0).getTaskPriority());
+        assertEquals(task.getName(),taskManager.getTask(0).getName());
+        assertEquals(task.getDescription(),taskManager.getTask(0).getDescription());
+        assertEquals(task.getUniqueId(),taskManager.getTask(0).getUniqueId());
+        assertEquals(task.getTaskPriority(),taskManager.getTask(0).getTaskPriority());
     }
 
     @Test
@@ -114,9 +120,8 @@ class TaskTest {
         assertEquals(1, tasks.size(), "Неверное количество задач.");
         assertEquals(task, tasks.get(0), "Задачи не совпадают.");
     }
-
     @Test
-    public void add() {
+    public void add(){
         Task task = new Task("Test addNewTask", "Test addNewTask description", NEW);
         inMemoryHistoryManager.add(task);
         final List<Task> history = inMemoryHistoryManager.getHistory();

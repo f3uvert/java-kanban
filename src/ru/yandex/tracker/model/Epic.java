@@ -15,15 +15,16 @@ public class Epic extends Task {
     }
 
     public int getSubTaskId(int id) {
-        try {
+        try{
             return subTaskId.get(id);
-        } catch (IndexOutOfBoundsException error) {
+        }
+        catch(IndexOutOfBoundsException error){
             return -1;
         }
     }
 
     public void setSubTaskId(int id) {
-        if (id != this.getUniqueId()) {
+        if(id != this.getUniqueId()) {
             subTaskId.add(id);
         }
     }
