@@ -17,19 +17,20 @@ public class Task {
         this.description = description;
         this.taskPriority = taskPriority;
     }
-    public void setName(String name){
+
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setDescription(String description){
-       this.description = description;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return description;
     }
 
@@ -63,8 +64,6 @@ public class Task {
     public void setTaskPriority(TaskPriority taskPriority) {
         this.taskPriority = taskPriority;
     }
-
-
 
 
     @Override
