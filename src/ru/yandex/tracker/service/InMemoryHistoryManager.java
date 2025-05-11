@@ -19,6 +19,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             this.next = null;
         }
     }
+
     private final Map<Integer, Node> nodeMap = new HashMap<>();
     private Node head;
     private Node tail;

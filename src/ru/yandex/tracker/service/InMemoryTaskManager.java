@@ -46,13 +46,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTask(int id) {
-        historyManager.add((Task)commonTask.get(id));
+        historyManager.add((Task) commonTask.get(id));
         return commonTask.get(id);
     }
 
     @Override
     public SubTask getSubTask(int id) {
-        historyManager.add((Task)subTaskMap.get(id));
+        historyManager.add((Task) subTaskMap.get(id));
         return subTaskMap.get(id);
     }
 
@@ -163,7 +163,6 @@ public class InMemoryTaskManager implements TaskManager {
         epicTask.clear();
         subTaskMap.clear();
     }
-
 
 
     private void updateEpicStatus(Epic epic) {
