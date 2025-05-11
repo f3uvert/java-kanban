@@ -26,8 +26,6 @@ class TaskTest {
         //task.setUniqueId(task1.getUniqueId());
 
         assertEquals(task, task1);
-
-
     }//True
 
     @Test
@@ -56,8 +54,7 @@ class TaskTest {
         subTask.setEpicId(subTask.getUniqueId());
 
         assertEquals(5, subTask.getEpicId());
-
-    }//True
+    }
 
     @Test
     public void utilClass() {
