@@ -1,6 +1,5 @@
 package ru.yandex.tracker.model;
 
-import org.junit.jupiter.api.Test;
 import ru.yandex.tracker.service.TaskPriority;
 
 import java.util.Objects;
