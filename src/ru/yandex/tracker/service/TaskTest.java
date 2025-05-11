@@ -26,7 +26,7 @@ class TaskTest {
         //task.setUniqueId(task1.getUniqueId());
 
         assertEquals(task, task1);
-    }//True
+    }
 
     @Test
     public void equalsParentId() {
@@ -35,7 +35,7 @@ class TaskTest {
         SubTask subTask = new SubTask("1", "1", epic.getUniqueId(), TaskPriority.NEW);
         subTask.setUniqueId(1);
         assertNotEquals(epic, subTask);
-    } //True
+    }
 
     @Test
     public void checkEpicAdd() {
@@ -43,8 +43,6 @@ class TaskTest {
         epic.setUniqueId(1);
         epic.setSubTaskId(epic.getUniqueId());
         assertEquals(-1, epic.getSubTaskId(epic.getUniqueId()));
-
-
     }
 
     @Test
@@ -52,7 +50,6 @@ class TaskTest {
         SubTask subTask = new SubTask("1", "1", 5, TaskPriority.NEW);
         subTask.setUniqueId(1);
         subTask.setEpicId(subTask.getUniqueId());
-
         assertEquals(5, subTask.getEpicId());
     }
 
