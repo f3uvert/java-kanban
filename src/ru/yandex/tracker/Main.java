@@ -5,9 +5,7 @@ import ru.yandex.tracker.model.SubTask;
 import ru.yandex.tracker.model.Task;
 import ru.yandex.tracker.service.*;
 
-import java.util.List;
 
-import static ru.yandex.tracker.service.TaskPriority.*;
 
 public class Main {
 
