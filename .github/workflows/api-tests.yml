@@ -1,8 +1,8 @@
-steps:
-  - name: Find and compile tests
-    run: |
-      # Поиск тестов в правильной папке
-      find ./java-kanban/src/test -type f -name "*.java" > tests.txt
-      
-      # Компиляция тестов
-      javac -d out @tests.txt -cp "./java-kanban/out:./java-kanban/tests/lib/junit-platform-console-standalone-1.9.3.jar:./java-kanban/tests/lib/gson-2.10.1.jar"
+name: Java Tests
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    uses: yandex-praktikum/java-kanban/.github/workflows/api-tests.yml@ci
