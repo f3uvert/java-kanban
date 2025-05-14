@@ -1,11 +1,14 @@
 package ru.yandex.tracker.service;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.tracker.model.Epic;
 import ru.yandex.tracker.model.SubTask;
 import ru.yandex.tracker.model.Task;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +22,8 @@ class TaskTest {
     private HistoryManager historyManager;
     private Task task1;
     private Task task2;
+    private File tempFile;
+    private FileBackedTaskManager manager;
 
 
     @Test
@@ -200,12 +205,14 @@ class TaskTest {
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         historyManager = new InMemoryHistoryManager();
         task1 = new Task("Task 1", "Description 1", TaskPriority.NEW);
         task1.setUniqueId(1);
         task2 = new Task("Task 2", "Description 2", TaskPriority.NEW);
         task2.setUniqueId(2);
+        tempFile = File.createTempFile("tasks", ".csv");
+        manager = new FileBackedTaskManager(tempFile);
     }
 
     @Test
@@ -248,6 +255,48 @@ class TaskTest {
         final List<Task> history = historyManager.getHistory();
         assertEquals(15, history.size(), "История должна содержать максимум 15 задач");
     }
+
+
+    @AfterEach
+    void tearDown() {
+        tempFile.delete();
+    }
+
+    @Test
+    void shouldSaveAndLoadEmptyFile() {
+        FileBackedTaskManager loaded = FileBackedTaskManager.loadFromFile(tempFile);
+        assertTrue(loaded.getAllTasks().isEmpty());
+        assertTrue(loaded.getAllEpics().isEmpty());
+        assertTrue(loaded.getAllSubtasks().isEmpty());
+    }
+
+    @Test
+    void shouldSaveAndLoadTasks() {
+        Task task = new Task("Test", "Desc", TaskPriority.NEW);
+        int taskId = manager.addNewTask(task);
+
+        Epic epic = new Epic("Epic", "Epic desc", TaskPriority.NEW);
+        int epicId = manager.addNewEpic(epic);
+
+        SubTask subTask = new SubTask("Sub", "Sub desc", epicId, TaskPriority.NEW);
+        int subTaskId = manager.addNewSubTask(subTask);
+
+        FileBackedTaskManager loaded = FileBackedTaskManager.loadFromFile(tempFile);
+
+        assertEquals(task, loaded.getTask(taskId));
+        assertEquals(epic, loaded.getEpic(epicId));
+        assertEquals(subTask, loaded.getSubTask(subTaskId));
+    }
+
+    @Test
+    void shouldHandleSaveException() {
+        File readOnlyFile = new File("/readonly/tasks.csv");
+        FileBackedTaskManager brokenManager = new FileBackedTaskManager(readOnlyFile);
+
+        assertThrows(ManagerSaveException.class, () ->
+                brokenManager.addNewTask(new Task("Test", "Desc", TaskPriority.NEW)));
+    }
 }
+
 
 

@@ -1,6 +1,6 @@
 package ru.yandex.tracker.model;
-
 import ru.yandex.tracker.service.TaskPriority;
+
 
 import java.util.Objects;
 
