@@ -1,6 +1,8 @@
 package ru.yandex.tracker.model;
 
+import ru.yandex.tracker.service.FileBackedTaskManager;
 import ru.yandex.tracker.service.TaskPriority;
+import ru.yandex.tracker.service.TaskType;
 
 import java.util.Objects;
 
