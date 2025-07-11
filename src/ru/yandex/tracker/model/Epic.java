@@ -2,6 +2,7 @@ package ru.yandex.tracker.model;
 
 
 import ru.yandex.tracker.service.TaskPriority;
+import ru.yandex.tracker.service.TaskType;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,10 @@ public class Epic extends Task {
 
     public void deleteSubTasks() {
         subTaskId.clear();
+    }
+
+    public TaskType getType(){
+        return TaskType.EPIC;
     }
 
 

@@ -21,15 +21,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateTask(Task task) {
-        super.updateTask(task);
+    public int addNewSubTask(SubTask subTask) {
+        int id = super.addNewSubTask(subTask);
         save();
-    }
-
-    @Override
-    public void deleteTask(int id) {
-        super.deleteTask(id);
-        save();
+        return id;
     }
 
     @Override
@@ -40,10 +35,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public int addNewSubTask(SubTask subTask) {
-        int id = super.addNewSubTask(subTask);
+    public void updateTask(Task task) {
+        super.updateTask(task);
         save();
-        return id;
+    }
+
+    @Override
+    public void deleteTask(int id) {
+        super.deleteTask(id);
+        save();
     }
 
     @Override
@@ -86,24 +86,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private String taskToString(Task task) {
         StringJoiner joiner = new StringJoiner(",");
-        joiner.add(String.valueOf(task.getUniqueId()));
+        joiner.add(String.valueOf(task.getUniqueId())); //id
 
 
         if (task instanceof Epic) {
-            joiner.add(TaskType.EPIC.name());
-            joiner.add(""); //
+            joiner.add(TaskType.EPIC.name()); //type
         } else if (task instanceof SubTask) {
-            joiner.add(TaskType.SUBTASK.name());
-            joiner.add(String.valueOf(((SubTask) task).getEpicId()));
+            joiner.add(TaskType.SUBTASK.name());// type
         } else {
-            joiner.add(TaskType.TASK.name());
-            joiner.add("");
+            joiner.add(TaskType.TASK.name()); //type
         }
 
-        joiner.add(task.getName());
-        joiner.add(task.getTaskPriority().name());
-        joiner.add(task.getDescription());
+        joiner.add(task.getName()); //name
+        joiner.add(task.getTaskPriority().name()); //priority
+        joiner.add(task.getDescription()); //description
 
+        if (task instanceof SubTask) {
+            joiner.add(String.valueOf(((SubTask) task).getEpicId())); //epic
+        }
         return joiner.toString();
     }
 

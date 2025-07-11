@@ -1,6 +1,7 @@
 package ru.yandex.tracker.model;
 
 import ru.yandex.tracker.service.TaskPriority;
+import ru.yandex.tracker.service.TaskType;
 
 public class SubTask extends Task {
     private int epicId;
@@ -19,6 +20,10 @@ public class SubTask extends Task {
         if (epicId != this.getUniqueId()) {
             this.epicId = epicId;
         }
+    }
+
+    public TaskType getType(){
+        return TaskType.SUBTASK;
     }
 
 }
