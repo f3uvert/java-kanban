@@ -1,13 +1,13 @@
-package ru.yandex.tracker.service;
+package ru.yandex.tracker;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;//MANAGERS
+import org.junit.jupiter.api.Test;
 import ru.yandex.tracker.model.Epic;
 import ru.yandex.tracker.model.SubTask;
 import ru.yandex.tracker.model.Task;
 import ru.yandex.tracker.service.*;
-
+import ru.yandex.tracker.service.TaskPriority;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
