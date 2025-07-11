@@ -37,7 +37,7 @@ public class Epic extends Task {
         subTaskId.clear();
     }
 
-    public TaskType getType(){
+    public TaskType getType() {
         return TaskType.EPIC;
     }
 
