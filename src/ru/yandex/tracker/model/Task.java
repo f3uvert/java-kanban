@@ -76,7 +76,7 @@ public class Task {
                 '}';
     }
 
-    public TaskType getType(){
+    public TaskType getType() {
         return TaskType.TASK;
     }
 
