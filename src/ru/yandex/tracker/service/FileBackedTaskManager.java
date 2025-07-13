@@ -137,14 +137,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private static Task taskFromString(String value) {
         String[] fields = value.split(",", -1);
-        if (fields.length < 6) return null;
 
         int id = Integer.parseInt(fields[0]);
         TaskType type = TaskType.valueOf(fields[1]);
-        String name = fields[3];
-        TaskPriority priority = TaskPriority.valueOf(fields[4]);
-        String description = fields[5];
-        String epicIdField = fields[2];
+        String name = fields[2];
+        TaskPriority priority = TaskPriority.valueOf(fields[3]);
+        String description = fields[4];
+
 
         switch (type) {
             case TASK:
@@ -156,7 +155,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 epic.setUniqueId(id);
                 return epic;
             case SUBTASK:
-                int epicId = epicIdField.isEmpty() ? 0 : Integer.parseInt(epicIdField);
+                int epicId = Integer.parseInt(fields[5]);
                 SubTask subTask = new SubTask(name, description, epicId, priority);
                 subTask.setUniqueId(id);
                 return subTask;
