@@ -15,11 +15,6 @@ public class InMemoryTaskManager implements TaskManager {
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
-    public List<Task> getAllTasks() {
-        return List.of();
-    }
-
-    @Override
     public List<Epic> getAllEpics() {
         return List.of();
     }
