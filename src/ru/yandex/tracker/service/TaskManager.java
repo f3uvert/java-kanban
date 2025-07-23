@@ -8,49 +8,52 @@ import java.util.List;
 
 public interface TaskManager {
 
-    public List<Task> getTasks();
 
-    public List<SubTask> getSubtasks();
+    List<Task> getAllTasks();
 
-    public List<Epic> getEpics();
+    List<Epic> getAllEpics();
 
-    public List<SubTask> getEpicSubtasks(int epicId);
+    List<SubTask> getAllSubtasks();
 
-    public Task getTask(int id);
+    List<Task> getTasks();
 
-    public SubTask getSubTask(int id);
+    List<SubTask> getSubtasks();
 
-    public Epic getEpic(int id);
+    List<Epic> getEpics();
 
-    public int addNewTask(Task task);
+    List<SubTask> getEpicSubtasks(int epicId);
 
-    public int addNewEpic(Epic epic);
+    Task getTask(int id);
 
-    public int addNewSubTask(SubTask subTask);
+    SubTask getSubTask(int id);
 
-    public void updateTask(Task task);
+    Epic getEpic(int id);
 
-    public void updateEpic(Epic epic);
+    int addNewTask(Task task);
 
-    public void updateSubTask(SubTask subTask);
+    int addNewEpic(Epic epic);
 
-    public void deleteTask(int id);
+    int addNewSubTask(SubTask subTask);
 
-    public void deleteEpic(int epicId);
+    void updateTask(Task task);
 
-    public void deleteSubTask(int id);
+    void updateEpic(Epic epic);
 
-    public void deleteTasks();
+    void updateSubTask(SubTask subTask);
 
-    public void deleteSubTasks();
+    void deleteTask(int id);
 
-    public void deleteEpics();
+    void deleteEpic(int epicId);
 
-    public List<Task> getHistory();
-    //Добавьте в программу новую функциональность — нужно, чтобы трекер отображал последние просмотренные пользователем задачи.
-    // Для этого добавьте метод getHistory в TaskManager и реализуйте его — он должен возвращать последние 10 просмотренных задач.
-    // Просмотром будем считать вызов тех методов, которые получают задачу по идентификатору
-    // — getTask(int id), getSubtask(int id) и getEpic(int id). От повторных просмотров избавляться не нужно.
+    void deleteSubTask(int id);
+
+    void deleteTasks();
+
+    void deleteSubTasks();
+
+    void deleteEpics();
+
+    List<Task> getHistory();
 
 
 }

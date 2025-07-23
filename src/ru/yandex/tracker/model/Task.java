@@ -1,6 +1,7 @@
 package ru.yandex.tracker.model;
-
 import ru.yandex.tracker.service.TaskPriority;
+import ru.yandex.tracker.service.TaskType;
+
 
 import java.util.Objects;
 
@@ -73,6 +74,10 @@ public class Task {
                 ", uniqueId=" + uniqueId +
                 ", taskPriority=" + taskPriority +
                 '}';
+    }
+
+    public TaskType getType() {
+        return TaskType.TASK;
     }
 
 }
