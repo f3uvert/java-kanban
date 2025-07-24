@@ -4,6 +4,8 @@ import ru.yandex.tracker.model.*;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -86,23 +88,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private String taskToString(Task task) {
         StringJoiner joiner = new StringJoiner(",");
-        joiner.add(String.valueOf(task.getUniqueId())); //id
+        joiner.add(String.valueOf(task.getUniqueId()));
+        joiner.add(task.getType().name());
+        joiner.add(task.getName());
+        joiner.add(task.getTaskPriority().name());
+        joiner.add(task.getDescription());
 
 
-        if (task instanceof Epic) {
-            joiner.add(TaskType.EPIC.name()); //type
-        } else if (task instanceof SubTask) {
-            joiner.add(TaskType.SUBTASK.name());// type
-        } else {
-            joiner.add(TaskType.TASK.name()); //type
-        }
-
-        joiner.add(task.getName()); //name
-        joiner.add(task.getTaskPriority().name()); //priority
-        joiner.add(task.getDescription()); //description
+        joiner.add(task.getStartTime() != null ? task.getStartTime().toString() : "null");
+        joiner.add(task.getDuration() != null ? String.valueOf(task.getDuration().toMinutes()) : "null");
 
         if (task instanceof SubTask) {
-            joiner.add(String.valueOf(((SubTask) task).getEpicId())); //epic
+            joiner.add(String.valueOf(((SubTask) task).getEpicId()));
         }
         return joiner.toString();
     }
@@ -143,11 +140,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String name = fields[2];
         TaskPriority priority = TaskPriority.valueOf(fields[3]);
         String description = fields[4];
+        LocalDateTime startTime = !"null".equals(fields[5]) ? LocalDateTime.parse(fields[5]) : null;
+        Duration duration = !"null".equals(fields[6]) ? Duration.ofMinutes(Long.parseLong(fields[6])) : null;
 
 
         switch (type) {
             case TASK:
-                Task task = new Task(name, description, priority);
+                Task task = new Task(name, description, priority,startTime,duration);
                 task.setUniqueId(id);
                 return task;
             case EPIC:
@@ -156,7 +155,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 return epic;
             case SUBTASK:
                 int epicId = Integer.parseInt(fields[5]);
-                SubTask subTask = new SubTask(name, description, epicId, priority);
+                SubTask subTask = new SubTask(name, description, epicId, priority,startTime,duration);
                 subTask.setUniqueId(id);
                 return subTask;
             default:
