@@ -17,11 +17,8 @@ public class Epic extends Task {
         super(name, description, taskPriority, null, null);
     }
 
-    // Метод для получения подзадачи (добавляем его)
-    protected SubTask getSubTask(int id) {
-        // Реализация должна быть в дочернем классе или через менеджер
+    public SubTask getSubTask(int id) {
         return subTaskMap != null ? subTaskMap.get(id) : null;
-
     }
 
     @Override
