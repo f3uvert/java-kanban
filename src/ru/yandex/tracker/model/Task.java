@@ -16,7 +16,7 @@ public class Task {
     private LocalDateTime startTime;
 
 
-    public Task(String name, String description, TaskPriority taskPriority,LocalDateTime startTime,Duration duration){
+    public Task(String name, String description, TaskPriority taskPriority,LocalDateTime startTime,Duration duration) {
         this.name = name;
         this.description = description;
         this.taskPriority = taskPriority;
