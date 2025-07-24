@@ -4,7 +4,10 @@ import ru.yandex.tracker.model.Epic;
 import ru.yandex.tracker.model.SubTask;
 import ru.yandex.tracker.model.Task;
 
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class InMemoryTaskManager implements TaskManager {
@@ -13,6 +16,45 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Epic> epicTask = new HashMap<>();
     private final Map<Integer, SubTask> subTaskMap = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
+
+    public boolean isTasksIntersect(Task task1, Task task2) {
+        if (task1.getStartTime() == null || task2.getStartTime() == null) {
+            return false;
+        }
+
+        LocalDateTime start1 = task1.getStartTime();
+        LocalDateTime end1 = task1.getEndTime();
+        LocalDateTime start2 = task2.getStartTime();
+        LocalDateTime end2 = task2.getEndTime();
+
+        return !(end1.isBefore(start2) || end2.isBefore(start1));
+    }
+
+    public boolean hasTaskIntersections(Task newTask) {
+        if (newTask.getStartTime() == null) {
+            return false;
+        }
+
+        return getPrioritizedTasks().stream()
+                .anyMatch(existingTask -> isTasksIntersect(newTask, existingTask));
+    }
+
+    public Set<Task> getPrioritizedTasks() {
+        Comparator<Task> priorityComparator = Comparator.comparing(
+                Task::getStartTime,
+                Comparator.nullsLast(Comparator.naturalOrder())
+        );
+
+        return Stream.concat(
+                        Stream.concat(
+                                commonTask.values().stream(),
+                                subTaskMap.values().stream()
+                        ),
+                        epicTask.values().stream()
+                )
+                .filter(task -> task.getStartTime() != null)
+                .collect(Collectors.toCollection(() -> new TreeSet<>(priorityComparator)));
+    }
 
     @Override
     public List<Task> getAllTasks() {
@@ -48,15 +90,13 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<SubTask> getEpicSubtasks(int epicId) {
         Epic epic = epicTask.get(epicId);
-        ArrayList<Integer> allSubTaskId = epic.getAllSubTasks();
-        ArrayList<SubTask> newSubTaskList = new ArrayList<>();
-        for (Integer id : allSubTaskId) {
-            SubTask subTask = subTaskMap.get(id);
-            if (subTask != null) {
-                newSubTaskList.add(subTask);
-            }
+        if (epic == null) {
+            return List.of();
         }
-        return newSubTaskList;
+        return epic.getAllSubTasks().stream()
+                .map(subTaskMap::get)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -88,7 +128,6 @@ public class InMemoryTaskManager implements TaskManager {
         task.setUniqueId(id);
         commonTask.put(id, task);
         return id;
-
     }
 
     @Override

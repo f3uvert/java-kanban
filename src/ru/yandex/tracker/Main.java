@@ -7,6 +7,8 @@ import ru.yandex.tracker.service.*;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 
 public class Main {
@@ -16,13 +18,15 @@ public class Main {
         TaskManager manager = Managers.getDefault();
 
 
-        Task task1 = new Task("Task 1", "Description 1", TaskPriority.NEW);
+        Task task1 = new Task("Task 1", "Description 1", TaskPriority.NEW,
+                LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
         int taskId1 = manager.addNewTask(task1);
 
         Epic epic1 = new Epic("Epic 1", "Description epic", TaskPriority.NEW);
         int epicId1 = manager.addNewEpic(epic1);
 
-        SubTask subTask1 = new SubTask("Subtask 1", "Desc", epicId1, TaskPriority.NEW);
+        SubTask subTask1 = new SubTask("Subtask 1", "Desc", epicId1, TaskPriority.NEW,
+                LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
         int subTaskId1 = manager.addNewSubTask(subTask1);
 
 
@@ -76,8 +80,10 @@ public class Main {
             FileBackedTaskManager manager = new FileBackedTaskManager(tempFile);
 
 
-            Task task1 = new Task("Помыть посуду", "Срочно помыть всю посуду", TaskPriority.NEW);
-            Task task2 = new Task("Сделать ДЗ", "Выполнить задание по трекеру", TaskPriority.IN_PROGRESS);
+            Task task1 = new Task("Помыть посуду", "Срочно помыть всю посуду",
+                    TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
+            Task task2 = new Task("Сделать ДЗ", "Выполнить задание по трекеру", TaskPriority.IN_PROGRESS,
+                    LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
 
             Epic epic1 = new Epic("Ремонт", "Сделать ремонт в квартире", TaskPriority.NEW);
 
@@ -85,7 +91,8 @@ public class Main {
             manager.addNewTask(task2);
             int epicId = manager.addNewEpic(epic1);
 
-            SubTask subTask1 = new SubTask("Купить материалы", "Купить краску и кисти", epicId, TaskPriority.NEW);
+            SubTask subTask1 = new SubTask("Купить материалы", "Купить краску и кисти", epicId, TaskPriority.NEW,
+                    LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
             manager.addNewSubTask(subTask1);
 
             System.out.println("Сохранено в файл: " + tempFile.getAbsolutePath());
@@ -106,13 +113,14 @@ public class Main {
 
             FileBackedTaskManager manager = new FileBackedTaskManager(tempFile);
 
-            Task task = new Task("Задача 1", "Описание 1", TaskPriority.DONE);
+            Task task = new Task("Задача 1", "Описание 1", TaskPriority.DONE, LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
             Epic epic = new Epic("Эпик 1", "Описание эпика", TaskPriority.IN_PROGRESS);
 
             manager.addNewTask(task);
             int epicId = manager.addNewEpic(epic);
 
-            SubTask subTask = new SubTask("Подзадача 1", "Описание подзадачи", epicId, TaskPriority.NEW);
+            SubTask subTask = new SubTask("Подзадача 1", "Описание подзадачи", epicId, TaskPriority.NEW,
+                    LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
             manager.addNewSubTask(subTask);
 
 

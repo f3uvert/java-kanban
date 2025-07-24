@@ -1,0 +1,4 @@
+id,type,name,priority,description,epic
+0,TASK,Task 1,NEW,Description 1,null,null
+1,EPIC,Epic 1,NEW,Description epic,null,0
+2,SUBTASK,Subtask 1,NEW,Desc,null,null,1
