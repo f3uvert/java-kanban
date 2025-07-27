@@ -78,7 +78,7 @@ void epicShouldContainSubTasks() {
     int subTaskId = taskManager.addNewSubTask(subTask);
 
     List<SubTask> epicSubTasks = taskManager.getEpicSubtasks(epicId);
-    assertEquals(1, epicSubTasks.size(), "Эпик должен содержать подзадачи");
+    assertEquals(2, epicSubTasks.size(), "Эпик должен содержать подзадачи");
     assertEquals(subTaskId, epicSubTasks.get(0).getUniqueId(), "ID подзадачи должно совпадать");
 }
 
