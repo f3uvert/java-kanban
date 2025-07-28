@@ -16,7 +16,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Epic> epicTask = new HashMap<>();
     private final Map<Integer, SubTask> subTaskMap = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
-    protected final Set prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime,
+    protected final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime,
             Comparator.nullsLast(Comparator.naturalOrder())));
 
 
@@ -213,6 +213,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteTask(int id) {
         commonTask.remove(id);
         historyManager.remove(id);
+        prioritizedTasks.removeIf(task -> task.getUniqueId() == id);
     }
 
     @Override
@@ -238,6 +239,7 @@ public class InMemoryTaskManager implements TaskManager {
                 updateEpicTime(epic);
             }
             historyManager.remove(id);
+            prioritizedTasks.removeIf(task -> task.equals(subTask));
         }
     }
 
@@ -246,6 +248,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         for (Integer taskId : commonTask.keySet()) {
             historyManager.remove(taskId);
+            prioritizedTasks.removeIf(task -> task.getUniqueId() == taskId);
         }
         commonTask.clear();
     }
@@ -255,6 +258,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         for (Integer subTaskId : subTaskMap.keySet()) {
             historyManager.remove(subTaskId);
+            prioritizedTasks.removeIf(task -> task.getUniqueId() == subTaskId);
         }
         subTaskMap.clear();
 
@@ -272,7 +276,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
 
-        // Затем удаляем сами эпики
+
         for (Integer epicId : epicTask.keySet()) {
             historyManager.remove(epicId);
         }
