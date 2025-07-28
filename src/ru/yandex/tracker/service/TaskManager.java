@@ -5,9 +5,11 @@ import ru.yandex.tracker.model.SubTask;
 import ru.yandex.tracker.model.Task;
 
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
 
+    Set<Task> getPrioritizedTasks();
 
     List<Task> getAllTasks();
 

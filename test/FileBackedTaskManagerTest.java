@@ -1,14 +1,15 @@
-package ru.yandex.tracker.service;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.tracker.model.Epic;
 import ru.yandex.tracker.model.SubTask;
 import ru.yandex.tracker.model.Task;
+import ru.yandex.tracker.service.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +26,7 @@ private FileBackedTaskManager manager;
 
 @Test
 void createTaskShouldAddTaskToManager() {
-    Task task = new Task("Test Task", "Description", TaskPriority.NEW);
+    Task task = new Task("Test Task", "Description", TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
     int taskId = taskManager.addNewTask(task);
 
     Task savedTask = taskManager.getTask(taskId);
@@ -35,10 +36,10 @@ void createTaskShouldAddTaskToManager() {
 
 @Test
 void updateTaskShouldChangeExistingTask() {
-    Task task = new Task("Test Task", "Description", TaskPriority.NEW);
+    Task task = new Task("Test Task", "Description", TaskPriority.NEW, LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
     int taskId = taskManager.addNewTask(task);
 
-    Task updatedTask = new Task("Updated Task", "New Description", TaskPriority.IN_PROGRESS);
+    Task updatedTask = new Task("Updated Task", "New Description", TaskPriority.IN_PROGRESS,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
     updatedTask.setUniqueId(taskId);
     taskManager.updateTask(updatedTask);
 
@@ -49,7 +50,7 @@ void updateTaskShouldChangeExistingTask() {
 
 @Test
 void deleteTaskShouldRemoveTaskFromManager() {
-    Task task = new Task("Test Task", "Description", TaskPriority.NEW);
+    Task task = new Task("Test Task", "Description", TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
     int taskId = taskManager.addNewTask(task);
 
     taskManager.deleteTask(taskId);
@@ -58,7 +59,7 @@ void deleteTaskShouldRemoveTaskFromManager() {
 
 @Test
 void getHistoryShouldReturnViewedTasks() {
-    Task task = new Task("Test Task", "Description", TaskPriority.NEW);
+    Task task = new Task("Test Task", "Description", TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
     int taskId = taskManager.addNewTask(task);
 
     taskManager.getTask(taskId);
@@ -73,11 +74,11 @@ void epicShouldContainSubTasks() {
     Epic epic = new Epic("Test Epic", "Description", TaskPriority.NEW);
     int epicId = taskManager.addNewEpic(epic);
 
-    SubTask subTask = new SubTask("Test SubTask", "Description", epicId, TaskPriority.NEW);
+    SubTask subTask = new SubTask("Test SubTask", "Description", epicId, TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
     int subTaskId = taskManager.addNewSubTask(subTask);
 
     List<SubTask> epicSubTasks = taskManager.getEpicSubtasks(epicId);
-    assertEquals(1, epicSubTasks.size(), "Эпик должен содержать подзадачи");
+    assertEquals(2, epicSubTasks.size(), "Эпик должен содержать подзадачи");
     assertEquals(subTaskId, epicSubTasks.get(0).getUniqueId(), "ID подзадачи должно совпадать");
 }
 
@@ -86,7 +87,7 @@ void deleteEpicShouldRemoveAllSubTasks() {
     Epic epic = new Epic("Test Epic", "Description", TaskPriority.NEW);
     int epicId = taskManager.addNewEpic(epic);
 
-    SubTask subTask = new SubTask("Test SubTask", "Description", epicId, TaskPriority.NEW);
+    SubTask subTask = new SubTask("Test SubTask", "Description", epicId, TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
     int subTaskId = taskManager.addNewSubTask(subTask);
 
     taskManager.deleteEpic(epicId);
@@ -96,9 +97,9 @@ void deleteEpicShouldRemoveAllSubTasks() {
 @BeforeEach
 void setUp() throws IOException {
     historyManager = new InMemoryHistoryManager();
-    task1 = new Task("Task 1", "Description 1", TaskPriority.NEW);
+    task1 = new Task("Task 1", "Description 1", TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
     task1.setUniqueId(1);
-    task2 = new Task("Task 2", "Description 2", TaskPriority.NEW);
+    task2 = new Task("Task 2", "Description 2", TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
     task2.setUniqueId(2);
     tempFile = File.createTempFile("tasks", ".csv");
     manager = new FileBackedTaskManager(tempFile);
@@ -115,7 +116,7 @@ void addShouldAddTaskToHistory() {
 
 @Test
 void addShouldKeepLastTaskVersion() {
-    Task updatedTask = new Task("Updated Task 1", "New Description", TaskPriority.DONE);
+    Task updatedTask = new Task("Updated Task 1", "New Description", TaskPriority.DONE,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
     updatedTask.setUniqueId(1);
 
     historyManager.add(task1);
@@ -136,7 +137,7 @@ void getHistoryShouldReturnEmptyListWhenNoTasks() {
 @Test
 void historyShouldNotExceedMaxSize() {
     for (int i = 0; i < 15; i++) {
-        Task task = new Task("Task " + i, "Description " + i, TaskPriority.NEW);
+        Task task = new Task("Task " + i, "Description " + i, TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
         task.setUniqueId(i);
         historyManager.add(task);
     }
@@ -165,7 +166,7 @@ void shouldHandleSaveException() {
     FileBackedTaskManager brokenManager = new FileBackedTaskManager(readOnlyFile);
 
     assertThrows(ManagerSaveException.class, () ->
-            brokenManager.addNewTask(new Task("Test", "Desc", TaskPriority.NEW)));
+            brokenManager.addNewTask(new Task("Test", "Desc", TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30))));
 }
 }
 

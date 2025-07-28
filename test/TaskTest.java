@@ -1,7 +1,5 @@
-package test;
+package ru.yandex.tracker;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.tracker.model.Epic;
 import ru.yandex.tracker.model.SubTask;
@@ -9,7 +7,8 @@ import ru.yandex.tracker.model.Task;
 import ru.yandex.tracker.service.*;
 
 import java.io.File;
-import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,8 +28,8 @@ class TaskTest {
 
     @Test
     public void equalsTaskId() {
-        Task task = new Task("1", "1", TaskPriority.NEW);
-        Task task1 = new Task("2", "2", TaskPriority.NEW);
+        Task task = new Task("1", "1", TaskPriority.NEW, LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
+        Task task1 = new Task("2", "2", TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
         task.setUniqueId(1);
         task1.setUniqueId(1);
         //task.setUniqueId(task1.getUniqueId());
@@ -42,7 +41,7 @@ class TaskTest {
     public void equalsParentId() {
         Epic epic = new Epic("1", "1", TaskPriority.NEW);
         epic.setUniqueId(1);
-        SubTask subTask = new SubTask("1", "1", epic.getUniqueId(), TaskPriority.NEW);
+        SubTask subTask = new SubTask("1", "1", epic.getUniqueId(), TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
         subTask.setUniqueId(1);
         assertNotEquals(epic, subTask);
     }
@@ -57,7 +56,7 @@ class TaskTest {
 
     @Test
     public void checkSubTask() {
-        SubTask subTask = new SubTask("1", "1", 5, TaskPriority.NEW);
+        SubTask subTask = new SubTask("1", "1", 5, TaskPriority.NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
         subTask.setUniqueId(1);
         subTask.setEpicId(subTask.getUniqueId());
         assertEquals(5, subTask.getEpicId());
@@ -71,11 +70,11 @@ class TaskTest {
 
     @Test
     public void idInMemoryTaskManager() {
-        Task task = new Task("1", "1", NEW);
+        Task task = new Task("1", "1", NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
         taskManager.addNewTask(task);
         Epic epic = new Epic("1", "1", NEW);
         taskManager.addNewEpic(epic);
-        SubTask subTask = new SubTask("1", "1", epic.getUniqueId(), NEW);
+        SubTask subTask = new SubTask("1", "1", epic.getUniqueId(), NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
         taskManager.addNewSubTask(subTask);
         assertEquals(task, taskManager.getTask(task.getUniqueId()));
         assertEquals(subTask, taskManager.getSubTask(subTask.getUniqueId()));
@@ -84,7 +83,7 @@ class TaskTest {
 
     @Test
     public void generateId() {
-        Task task = new Task("1", "1", NEW);
+        Task task = new Task("1", "1", NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
         Epic epic = new Epic("2", "2", NEW);
         task.setUniqueId(1);
         taskManager.addNewTask(task);
@@ -94,7 +93,7 @@ class TaskTest {
 
     @Test
     public void editParameter() {
-        Task task = new Task("1", "1", NEW);
+        Task task = new Task("1", "1", NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
 
         taskManager.addNewTask(task);
         task.setName("2");
@@ -110,7 +109,7 @@ class TaskTest {
 
     @Test
     void addNewTask() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description", NEW);
+        Task task = new Task("Test addNewTask", "Test addNewTask description", NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
         final int taskId = taskManager.addNewTask(task);
 
         final Task savedTask = taskManager.getTask(taskId);
@@ -127,7 +126,7 @@ class TaskTest {
 
     @Test
     public void add() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description", NEW);
+        Task task = new Task("Test addNewTask", "Test addNewTask description", NEW,LocalDateTime.of(2025, 12, 25, 12, 30), Duration.ofMinutes(30));
         inMemoryHistoryManager.add(task);
         final List<Task> history = inMemoryHistoryManager.getHistory();
         assertNotNull(history, "История не пустая.");
