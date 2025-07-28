@@ -41,6 +41,7 @@ public class InMemoryTaskManager implements TaskManager {
         return getPrioritizedTasks().stream()
                 .anyMatch(existingTask -> isTasksIntersect(newTask, existingTask));
     }
+
     @Override
     public Set<Task> getPrioritizedTasks() {
         return new TreeSet<>(prioritizedTasks);
