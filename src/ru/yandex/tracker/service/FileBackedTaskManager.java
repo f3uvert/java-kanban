@@ -64,7 +64,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 
-            writer.write("id,type,name,priority,description,epic\n");
+            writer.write("id,type,name,priority,description,epic,starttime,duration\n");
 
 
             for (Task task : getTasks()) {
@@ -140,8 +140,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String name = fields[2];
         TaskPriority priority = TaskPriority.valueOf(fields[3]);
         String description = fields[4];
-        LocalDateTime startTime = !"null".equals(fields[5]) ? LocalDateTime.parse(fields[5]) : null;
-        Duration duration = !"null".equals(fields[6]) ? Duration.ofMinutes(Long.parseLong(fields[6])) : null;
+        LocalDateTime startTime = !"null".equals(fields[6]) ? LocalDateTime.parse(fields[6]) : null;
+        Duration duration = !"null".equals(fields[7]) ? Duration.ofMinutes(Long.parseLong(fields[7])) : null;
 
 
         switch (type) {

@@ -20,7 +20,7 @@ public class InMemoryTaskManager implements TaskManager {
             Comparator.nullsLast(Comparator.naturalOrder())));
 
 
-    public boolean isTasksIntersect(Task task1, Task task2) { /// Пересекаются ли 2 задачи во время выполнения
+    private boolean isTasksIntersect(Task task1, Task task2) { /// Пересекаются ли 2 задачи во время выполнения
         if (task1.getStartTime() == null || task2.getStartTime() == null) {
             return false;
         }
@@ -33,7 +33,7 @@ public class InMemoryTaskManager implements TaskManager {
         return !(end1.isBefore(start2) || end2.isBefore(start1));
     }
 
-    public boolean hasTaskIntersections(Task newTask) { /// Пересекается ли новая задача с любыми существующими задачами
+    private boolean hasTaskIntersections(Task newTask) { /// Пересекается ли новая задача с любыми существующими задачами
         if (newTask.getStartTime() == null) {
             return false;
         }
@@ -41,7 +41,7 @@ public class InMemoryTaskManager implements TaskManager {
         return getPrioritizedTasks().stream()
                 .anyMatch(existingTask -> isTasksIntersect(newTask, existingTask));
     }
-
+    @Override
     public Set<Task> getPrioritizedTasks() {
         return new TreeSet<>(prioritizedTasks);
     }
